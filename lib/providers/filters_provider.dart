@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../config/api_config.dart';
 
 enum Filter { glutenFree, lactoseFree, vegetarian, vegan }
 
@@ -20,7 +21,7 @@ class FiltersNotifier extends Notifier<Map<Filter, bool>> {
     if (userId == null) return;
 
     final response =
-        await http.get(Uri.parse('http://localhost:3000/user-filters/$userId'));
+        await http.get(Uri.parse('${ApiConfig.baseUrl}/user-filters/$userId'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       state = {
@@ -43,7 +44,7 @@ class FiltersNotifier extends Notifier<Map<Filter, bool>> {
     if (userId == null) return;
 
     await http.post(
-      Uri.parse('http://localhost:3000/update-filters'),
+      Uri.parse('${ApiConfig.baseUrl}/update-filters'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'userId': userId,
