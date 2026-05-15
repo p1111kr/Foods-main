@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../config/api_config.dart';
 import '../models/meal.dart';
 
 class FavoriteMealsNotifier extends Notifier<List<Meal>> {
@@ -17,7 +18,7 @@ class FavoriteMealsNotifier extends Notifier<List<Meal>> {
 
       if (userId == null) return;
 
-      final url = Uri.parse('http://localhost:3000/user-favorites/$userId');
+      final url = Uri.parse('${ApiConfig.baseUrl}/user-favorites/$userId');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -51,7 +52,7 @@ class FavoriteMealsNotifier extends Notifier<List<Meal>> {
       final userId = prefs.getString('userId');
 
       if (userId != null) {
-        final url = Uri.parse('http://localhost:3000/update-favorites');
+        final url = Uri.parse('${ApiConfig.baseUrl}/update-favorites');
         await http.post(
           url,
           headers: {'Content-Type': 'application/json'},
